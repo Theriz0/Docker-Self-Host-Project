@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-website-deployment
+  namespace: default
 spec:
   replicas: 1  # Changed from 0 to 1 (or your desired number)
   selector:
