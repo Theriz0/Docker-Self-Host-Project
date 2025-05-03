@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-website-service
+spec:
+  selector:
+    app: my-website
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 31000  # You can specify a desired NodePort (30000-32767)
+  type: NodePort
