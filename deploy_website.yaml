@@ -1,0 +1,32 @@
+- name: Deploy My Appealing Website to Minikube
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create ConfigMap from index.html
+      kubernetes.core.k8s:
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') or '~/.kube/config' }}"
+        name: custom-website-html
+        namespace: default
+        kind: ConfigMap
+        api_version: v1
+        resource_definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: custom-website-html
+          data:
+            index.html: "{{ lookup('file', 'index.html') }}"
+        state: present
+
+    - name: Apply Deployment
+      kubernetes.core.k8s:
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') or '~/.kube/config' }}"
+        src: deployment.yaml
+        state: present
+
+    - name: Apply Service
+      kubernetes.core.k8s:
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') or '~/.kube/config' }}"
+        src: service.yaml
+        state: present
