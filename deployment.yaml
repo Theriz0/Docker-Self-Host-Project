@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-website-deployment
+spec:
+  replicas: 1  # Changed from 0 to 1 (or your desired number)
+  selector:
+    matchLabels:
+      app: my-website
+  template:
+    metadata:
+      labels:
+        app: my-website
+    spec:
+      volumes:
+      - name: html-volume
+        configMap:
+          name: custom-website-html
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html  # Corrected mountPath
+          readOnly: true
