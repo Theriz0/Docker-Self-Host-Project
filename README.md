@@ -1,4 +1,4 @@
-# Docker Self-Hosted HTML Project with Kubernetes Orchestration via Ansible
+# Kubernetes Orchestration via Ansible
 
 ## Project Goal
 
