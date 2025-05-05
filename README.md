@@ -9,7 +9,8 @@ This project aims to demonstrate how to self-host a simple HTML website using Do
 1.  **`index.html`**: The HTML file containing the content of the website you want to self-host.
 2.  **`deployment.yaml`**: A Kubernetes Deployment definition that describes how your website's container (running Nginx) should be deployed and managed. It uses a ConfigMap to mount the HTML content.
 3.  **`service.yaml`**: A Kubernetes Service definition that exposes your website to the network using a NodePort.
-4.  **`deploy_website.yaml`**: An Ansible Playbook that automates the following steps:
+4.  **`ingress-https.yaml`**: A Kubernetes Ingress definition to expose the service externally via HTTPS.
+5.  **`deploy_website.yaml`**: An Ansible Playbook that automates the following steps:
     * Creating a Kubernetes ConfigMap from the `index.html` file.
     * Applying the Kubernetes Deployment defined in `deployment.yaml`.
     * Applying the Kubernetes Service defined in `service.yaml`.
@@ -58,13 +59,25 @@ Follow these steps to deploy your self-hosted website:
     python3 -m venv venv
     source venv/bin/activate
     ```
-* **Install Ansible and Kubernetes Python Client:**
+* **Install Ansible, Kubernetes Python Client and minikube addons:**
     ```bash
     pip3 install ansible
     pip3 install kubernetes
+    minikube addons enable ingress
     ```
 
-**4. Deploy using Ansible:**
+**4. Generate Self-Signed Certificates and Create Kubernetes Secret:**
+
+   These steps are done manually before running the Ansible playbook:
+
+   ```bash
+   openssl genrsa -out tls.key 2048
+   openssl req -new -key tls.key -out server.csr -subj "/CN=skandha.local" # Use your desired DNS name
+   openssl x509 -req -days 365 -in server.csr -signkey tls.key -out tls.crt
+   kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+   ```
+
+**5. Deploy using Ansible:**
 
 * Run the Ansible Playbook `deploy_website.yaml`:
     ```bash
@@ -75,7 +88,7 @@ Follow these steps to deploy your self-hosted website:
     * Apply the Deployment defined in `deployment.yaml` to the `default` namespace.
     * Apply the Service defined in `service.yaml` to the `default` namespace.
 
-**5. Access Your Deployed Website:**
+**6. Access Your Deployed Website:**
 
 * Get the IP address of your Minikube cluster:
     ```bash
@@ -83,11 +96,17 @@ Follow these steps to deploy your self-hosted website:
     ```
 * Open your web browser and navigate to the following URL, replacing `<minikube-ip>` with the actual IP address:
     ```
-    http://<minikube-ip>:31000
+    https://<minikubeIP-pointed-domain>
     ```
     You should now see your self-hosted HTML content.
-
-**6. Deactivate the Virtual Environment (Optional):**
-
-```bash
-deactivate
+  
+**7. Deactivate the Virtual Environment (Optional):**
+   ```bash
+   kubectl get ingress my-website-ingress-https -n default
+   kubectl get svc my-website-service -n default
+   kubectl get pods -l app=my-website -n default
+   ```
+  
+**8. Deactivate the Virtual Environment (Optional):**
+   ```bash
+   deactivate
