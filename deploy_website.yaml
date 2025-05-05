@@ -30,3 +30,9 @@
         kubeconfig: "{{ lookup('env', 'KUBECONFIG') or '~/.kube/config' }}"
         src: service.yaml
         state: present
+
+    - name: Apply Ingress for HTTPS
+      kubernetes.core.k8s:
+        kubeconfig: "{{ lookup('env', 'KUBECONFIG') or '~/.kube/config' }}"
+        src: ingress-http.yaml
+        state: present
