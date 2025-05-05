@@ -51,6 +51,21 @@ Follow these steps to deploy your self-hosted website:
     * A mapping of the Service's port 80 to the Pod's target port 80.
     * A `type: NodePort` to expose the service on a specific port (31000 in this case) on all Minikube nodes.
     * **Important:** Ensure `metadata.namespace: default` is present.
+* **`ingress-https.yaml`**: This file defines how to expose your service externally via HTTPS:
+    * **`apiVersion: networking.k8s.io/v1`**: Defines the Kubernetes Networking API version.
+    * **`kind: Ingress`**: Specifies that this is an Ingress resource.
+    * **`metadata.name: my-website-ingress-https`**: The name of your Ingress.
+    * **`metadata.namespace: default`**: Ensures the Ingress is created in the `default` namespace.
+    * **`spec.tls`**: Configures TLS (HTTPS) settings:
+        * **`hosts`**: A list of hostnames for which this TLS configuration applies (e.g., `skandha.local`).
+        * **`secretName: tls-secret`**: The name of the Kubernetes Secret containing the TLS certificate and key.
+    * **`spec.rules`**: Defines the routing rules for incoming requests:
+        * **`host`**: The hostname for which these rules apply (must match the `tls.hosts`).
+        * **`http.paths`**: A list of paths and their corresponding backend services:
+            * **`path: /`**: Matches all paths.
+            * **`pathType: Prefix`**: Matches based on the prefix of the path.
+            * **`backend.service.name: my-website-service`**: The name of the Kubernetes Service to forward traffic to.
+            * **`backend.service.port.number: 80`**: The port on the backend Service to forward traffic to.
 
 **3. Set Up Ansible for Orchestration:**
 
