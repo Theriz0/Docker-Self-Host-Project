@@ -72,7 +72,7 @@ Follow these steps to deploy your self-hosted website:
 
    ```bash
    openssl genrsa -out tls.key 2048
-   openssl req -new -key tls.key -out server.csr -subj "/CN=skandha.local" # Use your desired DNS name
+   openssl req -new -key tls.key -out server.csr -subj "/CN=<domain-you-want>" # Use your desired DNS name
    openssl x509 -req -days 365 -in server.csr -signkey tls.key -out tls.crt
    kubectl create secret tls tls-secret --key tls.key --cert tls.crt
    ```
