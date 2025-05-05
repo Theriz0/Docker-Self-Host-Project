@@ -115,7 +115,7 @@ Follow these steps to deploy your self-hosted website:
     ```
     You should now see your self-hosted HTML content.
   
-**7. Deactivate the Virtual Environment (Optional):**
+**7. Check Status of your Ingress Service (Optional):**
    ```bash
    kubectl get ingress my-website-ingress-https -n default
    kubectl get svc my-website-service -n default
