@@ -6,7 +6,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - skandha.local  # Replace with your Minikube IP.nip.io or localhost if configured
+    - <put your domain here>  # Replace with your Minikube IP.nip.io or localhost if configured
     secretName: tls-secret
   rules:
   - host: skandha.local  # Replace with your Minikube IP.nip.io or localhost if configured
