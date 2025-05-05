@@ -66,6 +66,12 @@ Follow these steps to deploy your self-hosted website:
             * **`pathType: Prefix`**: Matches based on the prefix of the path.
             * **`backend.service.name: my-website-service`**: The name of the Kubernetes Service to forward traffic to.
             * **`backend.service.port.number: 80`**: The port on the backend Service to forward traffic to.
+* **`deploy_website.yaml`**: This is the Ansible Playbook that automates the deployment:
+    * **`name: Deploy My Appealing Website to Minikube with HTTPS`**: A human-readable name for the playbook.
+    * **`hosts: localhost`**: Specifies that the tasks will run on the local machine.
+    * **`gather_facts: false`**: Disables gathering system facts.
+    * **`tasks`**: A list of automation steps:
+        * **`Create ConfigMap from index.html`**: Uses the `kubernetes.core.k8s` module to create the `custom-website-html` ConfigMap from 
 
 **3. Set Up Ansible for Orchestration:**
 
